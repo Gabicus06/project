@@ -1,0 +1,56 @@
+{% extends "farsys/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="card-deck">
+    <div class="card">
+      <div class="card-body">
+        <p class="cardTitle">S/ {{ montly }}</p>
+        <p class="card-text"><small class="text-muted">Venta del mes</small></p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <p class="cardTitle">S/ {{ average|floatformat:2}}</p>
+        <p class="card-text"><small class="text-muted">Venta promedio</small></p>
+      </div>
+    </div>
+    <div class="card">
+      <a class="nav-link" href="{% url 'report' %}">
+        <div class="card-body">
+          <p class="cardTitle">S/ {{ diario }}</p>
+          <p class="card-text"><small class="text-muted">Venta del día</small></p>
+        </div>
+      </a>
+    </div>
+</div>
+<br>
+<div class="card-deck">
+  <div class="card">
+    <div class="card-body">
+      <p class="cardTitle">S/ 00</p>
+      <p class="card-text"><small class="text-muted">Recargas</small></p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <p class="cardTitle">S/ 00</p>
+      <p class="card-text"><small class="text-muted">Medicamentos</small></p>
+    </div>
+  </div>
+  <div class="card">
+    <a class="nav-link" href="{% url 'report' %}">
+      <div class="card-body">
+        <p class="cardTitle">S/ 00</p>
+        <p class="card-text"><small class="text-muted">Otros</small></p>
+      </div>
+    </a>
+  </div>
+</div>
+<footer class="fixed-bottom small text-center text-muted mb-3">
+    Este sistema se ofrece gratis en su versión básica y nos ayudaría mucho tu feedback para poder mejorar y agregar nuevas funcionalidades<br><a href="/">Revisa nuestros planes</a>. Puedes revisar nuestros <a href="/">términos y condiciones.</a>.
+</footer>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

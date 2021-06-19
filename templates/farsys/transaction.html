@@ -1,0 +1,177 @@
+{% extends "farsys/layout.html" %}
+{% load static %}
+{% load bootstrap4 %}
+{% block body %}
+
+{% if "venta" in action %}
+    {% if "Registrar" in action %}
+        <form action="{% url 'sell' %}" method="post">
+    {% else %}
+        <form action="{% url 'editSale' saleId %}" method="post">
+    {% endif %}
+{% else %}
+    {% if "Registrar" in action %}
+        <form action="{% url 'buy' %}" method="post">
+    {% else %}
+        <form action="{% url 'editPurchase' purchaseId %}" method="post">
+    {% endif %}  
+{% endif %}
+            {% csrf_token %}
+            <div class="container">
+                <h3 class="title" id="action">{{action}}</h3>
+                <div class="row header1">
+                    <div class="col-lg-5">
+                        {% if "venta" in action %}
+                            {% bootstrap_field form.cliente %}
+                        {% else %}
+                            {% bootstrap_field form.proveedor %}
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-4">
+                        {% bootstrap_field form.sucursal %}
+                    </div>
+                    <div class="col-lg-3">
+                        {% bootstrap_field form.fecha %}
+                    </div>
+                </div>
+                <div id='new' class="input-group mb-3">
+                    {{ form2.Find }}
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="createProduct" data-toggle="modal" data-target="#createProd">Crear</button>
+                        <button class="btn btn-outline-secondary" type="button" id="addProduct" data-toggle="modal" data-target="#addProd">Agregar</button>
+                    </div>
+                </div>
+                {% if "Registrar" in action %}
+                    <table style="display: none;">
+                {% else %}
+                    <table>
+                {% endif %}
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Unidad</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="order">
+                            {{ form3.management_form }}
+                            {% for forms in form3 %}
+                            <tr id='empty'>
+                                {{ forms.id }}
+                                <td>{{ forms.producto }}</td>
+                                <td>{{ forms.unidad }}</td>
+                                <td>{{ forms.cantidad }}</td>
+                                <td>{{ forms.precio }}</td>
+                                <td>{{ forms.total }}</td>
+                                <td><a class="delete" title="Delete" onclick="delete_row(this)"><i class="material-icons">delete_outline</i></a></td>
+                                <td style="display:none">{{ forms.DELETE }}</div>
+                                <!-- Helpers for update stock -->
+                                <td style="display:none">{{ forms.stock }}</div>
+                                <td style="display:none"><input type="hidden" id= "{{forms.id.value}}" value="{{forms.cantidad.value}}"></div>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td>Total:</td>
+                                <td>{{ form.total}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div id="save"  class="col-lg-3">
+                        <button class="col-5 btn btn-primary activate" type="submit" onclick="activate()">Guardar</button>
+                        <button class="col-5 btn btn-primary activate" type="submit" onclick="activate()">Pagar</button>
+                    </div>
+            </div>
+        </form>
+        <!-- Modal -->
+        <div class="modal fade" id="createProd" tabindex="-1" role="dialog" aria-labelledby="createProd" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <form id="modalCreate" action="{% url 'new_product' %}" method="post">
+                    {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Crear Producto</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                {% bootstrap_form form4 %}
+                                <div class="mt-4"></div>
+                                <div class="row">
+                                    <div class="col">
+                                        {% bootstrap_field form5.price_1 layout='horizontal'%}
+                                    </div>
+                                    <div class="col">
+                                        {% bootstrap_field form5.unit_1 layout='horizontal'%}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        {% bootstrap_field form5.price_2 layout='horizontal'%}
+                                    </div>
+                                    <div class="col">
+                                        {% bootstrap_field form5.unit_2 layout='horizontal'%}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        {% bootstrap_field form5.price_3 layout='horizontal'%}
+                                    </div>
+                                    <div class="col">
+                                        {% bootstrap_field form5.unit_3 layout='horizontal'%}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        {% bootstrap_field form5.stock layout='horizontal'%}
+                                    </div>
+                                    <div class="col">
+                                        {% bootstrap_field form5.obs layout='horizontal'%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="modal">Guardar</button>     
+                        </div>   
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Add Product-->
+        <div class="modal fade" id="addProd" tabindex="-1" role="dialog" aria-labelledby="addProd" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <form id="modalAdd" action="{% url 'new_product' %}" method="post">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title">Agregar Medicamento</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div id='prodAdded' class="input-group mb-3">
+                                {{ form6.Find }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="addMed">Agregar</button>     
+                        </div>   
+                    </form>
+                </div>
+            </div>
+        </div>    
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'farsys/transaction.js' %}"></script>
+{% endblock %}

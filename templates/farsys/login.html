@@ -1,0 +1,25 @@
+{% extends "farsys/layout.html" %}
+
+{% block body %}
+
+    <h3 class="title">Login</h3>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+        </div>
+        <div class="input-group mb-3">
+            <input class="form-control" type="password" name="password" placeholder="Contraseña">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Ingresar">
+    </form>
+    <br>
+    <p>¿Aún no tienes una cuenta? <a href="{% url 'register' %}">Regístrate aquí.</a></p>
+    
+
+{% endblock %}

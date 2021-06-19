@@ -1,0 +1,46 @@
+{% extends "farsys/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div>
+    <input autocomplete="on" class="form-control mb-4" name="product" placeholder="Buscar producto" type="text" id="search">
+</div>
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" id="input" name="input">
+    
+    <table id="table" class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th scope="col" data-field="nombre" style="width: 63%">Nombre</th>
+                <th scope="col" data-field="presentación" style="width: 7%">Stock</th>
+                <th scope="col" data-field="stock_unidad" style="width: 7%">P. unid</th>
+                <th scope="col" data-field="precio_unidad" style="width: 7%">P. tira</th>
+                <th scope="col" data-field="precio_tira" style="width: 7%">P. caja</th>
+                <th scope="col" data-field="obs" style="width: 7%">Obs.</th>
+                <th scope="col" style="width: 2%"></th>
+            </tr>
+        </thead>
+        <tbody id="result">
+            {% for row in data %}
+            <tr>
+                <td>{{ row.product }}</td>
+                <td>{{ row.stock }}</td>
+                <td>{{ row.price_1 }}</td>
+                <td>{{ row.price_2 }}</td>
+                <td>{{ row.price_3 }}</td>
+                <td>{{ row.obs }}</td>
+                <td><button class="edit" type="submit" value="{{row.id}}" onclick="toEdit(this)"><i class="material-icons">edit</i></button></td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </font>
+</form>
+{% endblock %}
+
+{% block script %}
+    <script>var data = "{{ data }}";</script>
+    <script src="{% static 'farsys/products.js' %}"></script>
+{% endblock %}

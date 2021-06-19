@@ -1,0 +1,68 @@
+{% extends "farsys/layout.html" %}
+{% load static %}
+
+{% block body %}
+<h3 class="title">Reporte de ventas</h3>
+<form action="{% url 'report' %}" method="POST">
+    {% csrf_token %}
+    <div class="row mb-2">
+        <div class="col-lg-1">
+            <label for="date">Fecha: </label>
+        </div>
+        <div class="col-lg-3">
+            <input class="form-control" id="saleDate" name="date" type="date" value={{ date }}>
+        </div>
+        <!-- <div class="col-lg-1">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+        <div class="col-lg-2"></div>
+        <div class="col-lg-4">
+            <input autocomplete="on" autofocus class="form-control mb-4" name="product" placeholder="Filtrar producto" type="text" id="search">
+        </div> -->
+    </div>
+</form>
+
+<table id="table" class="table table-hover table-sm">
+    <thead>
+        <tr>
+            <th scope="col" data-field="nombre">Orden</th>
+            <th scope="col" data-field="nombre">Nombre</th>
+            <th scope="col" data-field="laboratorio">Cantidad</th>
+            <th scope="col" data-field="stock_unidad">Unidad</th>
+            <th scope="col" data-field="precio_unidad">Precio</th>
+            <th scope="col" data-field="precio_tira">Total</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody id="result">
+        {% for row in data %}
+        <tr>
+            <td>{{row.orden.id}}</td>
+            <td>{{row.producto}}</td>
+            <td>{{row.cantidad}}</td>
+            <td>{{row.unidad}}</td>
+            <td>{{row.precio}}</td>
+            <td>{{row.total}}</td>
+            <td><a class="icon" href="{% url 'editSale' row.orden.id %}"><i class="material-icons">edit</i></a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4"></td>
+            <th>S/ </th>
+            <th colspan="2">{{ gTotal }}</th>
+        </tr>
+    </tfoot>
+
+</table>
+{% endblock %}
+
+{% block script %}
+    <!-- <script src="{% static 'farsys/report.js' %}"></script> -->
+    <script>
+        function editSale(id){
+            fetch
+        }
+    </script>
+{% endblock %}

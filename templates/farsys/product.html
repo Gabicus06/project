@@ -1,0 +1,54 @@
+{% extends "farsys/layout.html" %}
+{% load static %}
+{% load bootstrap4 %}
+{% block body %}
+
+    <h3 class="title">{{ action }} producto</h3>
+
+    {% if action == "Crear" %}
+        <form action="{% url 'new_product' %}" method="post">
+    {% else %}
+        <form action="{% url 'edit_product' toEdit %}" method="post">
+    {% endif %}
+        {% csrf_token %}
+            <div>
+                {% bootstrap_form form %}
+                <div class="mt-4"></div>
+                <div class="row">
+                    <div class="col">
+                      {% bootstrap_field form2.price_1 layout='horizontal'%}
+                    </div>
+                    <div class="col">
+                      {% bootstrap_field form2.unit_1 layout='horizontal'%}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                      {% bootstrap_field form2.price_2 layout='horizontal'%}
+                    </div>
+                    <div class="col">
+                      {% bootstrap_field form2.unit_2 layout='horizontal'%}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                      {% bootstrap_field form2.price_3 layout='horizontal'%}
+                    </div>
+                    <div class="col">
+                      {% bootstrap_field form2.unit_3 layout='horizontal'%}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                      {% bootstrap_field form2.stock layout='horizontal'%}
+                    </div>
+                    <div class="col">
+                      {% bootstrap_field form2.obs layout='horizontal'%}
+                    </div>
+                </div>
+            </div>
+            <div class="my-2">
+                <input class="btn btn-primary" type="submit" value="Guardar">
+            </div>
+        </form>
+{% endblock %}
